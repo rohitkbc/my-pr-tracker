@@ -1,0 +1,105 @@
+name: Generate PR Log and Auto-Merge
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate-and-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Generate PR log file
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: rohitkbc
+        run: |
+          python << 'EOF'
+          import os, requests, datetime
+
+          TOKEN = os.environ["GITHUB_TOKEN"]
+          USER = os.environ["GITHUB_USERNAME"]
+
+          headers = {
+              "Authorization": f"token {TOKEN}",
+              "Accept": "application/vnd.github+json"
+          }
+
+          def fetch(q):
+              r = requests.get(
+                  "https://api.github.com/search/issues",
+                  headers=headers,
+                  params={"q": q, "per_page": 100}
+              )
+              r.raise_for_status()
+              return r.json()["items"]
+
+          open_prs = fetch(f"author:{USER} type:pr is:open")
+          merged_prs = fetch(f"author:{USER} type:pr is:merged")
+
+          now = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+
+          lines = [
+              "# PR Activity Log",
+              f"_Generated at {now}_",
+              "",
+              "## Open Pull Requests",
+          ]
+
+          for pr in open_prs:
+              repo = "/".join(pr["repository_url"].split("/")[-2:])
+              lines.append(f"- **{repo}** – {pr['title']}")
+              lines.append(f"  {pr['html_url']}")
+
+          lines.append("\n## Merged Pull Requests")
+          for pr in merged_prs:
+              repo = "/".join(pr["repository_url"].split("/")[-2:])
+              lines.append(f"- **{repo}** – {pr['title']}")
+              lines.append(f"  {pr['html_url']}")
+
+          lines.append("\n---")
+          lines.append(f"**Total Open:** {len(open_prs)}")
+          lines.append(f"**Total Merged:** {len(merged_prs)}")
+
+          os.makedirs("logs", exist_ok=True)
+          with open("logs/pr-log.md", "w") as f:
+              f.write("\n".join(lines))
+
+          print("PR log written to logs/pr-log.md")
+          EOF
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: pr-log-update
+          base: main
+          commit-message: "Update PR activity log"
+          title: "Update PR activity log"
+          body: |
+            This PR was generated automatically to update the PR activity log.
+
+      - name: Merge PR on my behalf
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge pr-log-update \
+            --squash \
+            --delete-branch \
+            --repo "${{ github.repository }}"
