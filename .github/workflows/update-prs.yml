@@ -18,6 +18,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,13 +39,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # 🔑 force local branch to match remote
-          git fetch origin
-          git reset --hard origin/main
-
-          # re-run update in case reset overwrote it
-          python scripts/update_readme.py
-
           git add README.md
           git commit -m "Auto-update PR list" || echo "No changes"
-          git push origin main
+
+          # ✅ SAFE bot push
+          git push origin HEAD:main --force-with-lease
