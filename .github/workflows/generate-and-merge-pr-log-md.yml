@@ -2,6 +2,8 @@ name: Generate PR Log MD and Auto-Merge
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "30 2 * * *"   # runs daily at 02:30 UTC
 
 permissions:
   contents: write
@@ -41,17 +43,26 @@ jobs:
               "Accept": "application/vnd.github+json"
           }
 
-          def fetch(q):
+          def fetch(query):
               r = requests.get(
                   "https://api.github.com/search/issues",
                   headers=headers,
-                  params={"q": q, "per_page": 100}
+                  params={"q": query, "per_page": 100}
               )
               r.raise_for_status()
               return r.json()["items"]
 
+          def is_my_repo(pr, username):
+              # repository_url -> https://api.github.com/repos/OWNER/REPO
+              owner = pr["repository_url"].split("/")[-2]
+              return owner.lower() == username.lower()
+
           open_prs = fetch(f"author:{USER} type:pr is:open")
           merged_prs = fetch(f"author:{USER} type:pr is:merged")
+
+          # ❌ Exclude PRs against your own repos
+          open_prs = [pr for pr in open_prs if not is_my_repo(pr, USER)]
+          merged_prs = [pr for pr in merged_prs if not is_my_repo(pr, USER)]
 
           now = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
@@ -105,7 +116,7 @@ jobs:
           title: "Update README with PR activity"
           body: |
             This PR automatically updates README.md with the latest
-            pull request activity.
+            pull request activity (excluding personal repositories).
 
       - name: Merge PR on my behalf
         env:
