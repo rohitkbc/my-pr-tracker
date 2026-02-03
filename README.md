@@ -1,6 +1,6 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-02-03 03:28 UTC**_
+_Last updated: **2026-02-03 03:32 UTC**_
 
 ---
 
@@ -41,13 +41,7 @@ _Last updated: **2026-02-03 03:28 UTC**_
   https://github.com/novuhq/novu/pull/4323
 - **FerretDB/FerretDB** – Add operation mode definition to Glossary
   https://github.com/FerretDB/FerretDB/pull/3472
-- **rohitkbc/Express-CRUD** – Create License.md
-  https://github.com/rohitkbc/Express-CRUD/pull/1
-- **rohitkbc/React-Book-Management** – Create License.md
-  https://github.com/rohitkbc/React-Book-Management/pull/2
-- **rohitkbc/React-Book-Management** – Create LICENSE.md
-  https://github.com/rohitkbc/React-Book-Management/pull/1
 
 ---
 **Total Open:** 2
-**Total Merged:** 18
+**Total Merged:** 15
