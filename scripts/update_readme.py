@@ -2,60 +2,113 @@ import os
 import requests
 from datetime import datetime
 
-TOKEN = os.environ["GITHUB_TOKEN"]
-USERNAME = os.environ["GITHUB_USERNAME"]
+# --------------------------------------------------
+# Config
+# --------------------------------------------------
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+USERNAME = os.getenv("GITHUB_USERNAME")
+
+if not GITHUB_TOKEN or not USERNAME:
+    raise RuntimeError("GITHUB_TOKEN or GITHUB_USERNAME not set")
 
 HEADERS = {
-    "Authorization": f"token {TOKEN}",
+    "Authorization": f"token {GITHUB_TOKEN}",
     "Accept": "application/vnd.github+json"
 }
 
 SEARCH_URL = "https://api.github.com/search/issues"
 
+# --------------------------------------------------
+# Helpers
+# --------------------------------------------------
 def fetch_prs(query):
+    """Fetch PRs using GitHub search API"""
     params = {
         "q": query,
         "per_page": 100
     }
-    res = requests.get(SEARCH_URL, headers=HEADERS, params=params)
-    res.raise_for_status()
-    return res.json()["items"]
+    resp = requests.get(SEARCH_URL, headers=HEADERS, params=params)
+    resp.raise_for_status()
+    return resp.json().get("items", [])
 
-open_prs = fetch_prs(f"author:{USERNAME} type:pr is:open")
-merged_prs = fetch_prs(f"author:{USERNAME} type:pr is:merged")
 
 def format_pr(pr):
     repo = pr["repository_url"].split("/")[-2:]
     repo_name = "/".join(repo)
-    return f"- [{repo_name}]({pr['html_url']}) – {pr['title']}"
+    title = pr["title"]
+    url = pr["html_url"]
+    return f"- **{repo_name}** – [{title}]({url})"
 
+
+# --------------------------------------------------
+# Fetch PRs
+# --------------------------------------------------
+print("Fetching PRs for user:", USERNAME)
+
+open_prs = fetch_prs(f"author:{USERNAME} type:pr is:open")
+merged_prs = fetch_prs(f"author:{USERNAME} type:pr is:merged")
+
+print(f"Open PRs found   : {len(open_prs)}")
+print(f"Merged PRs found : {len(merged_prs)}")
+
+# --------------------------------------------------
+# Build README content
+# --------------------------------------------------
 today = datetime.utcnow().strftime("%d %b %Y")
 
-content = f"""# 📌 My Pull Request Tracker
+content = [
+    "# 📌 My Pull Request Tracker",
+    "",
+    f"_Last updated: **{today}**_",
+    "",
+    "---",
+    "",
+    f"## 🔓 Open Pull Requests ({len(open_prs)})",
+    ""
+]
 
-_Last updated: **{today}**_
-
----
-
-## 🔓 Open Pull Requests ({len(open_prs)})
-"""
 if open_prs:
-    content += "\n".join(format_pr(pr) for pr in open_prs)
+    content.extend(format_pr(pr) for pr in open_prs)
 else:
-    content += "_No open PRs 🎉_"
+    content.append("_No open pull requests found._")
 
-content += f"""
+content.extend([
+    "",
+    "---",
+    "",
+    f"## ✅ Merged Pull Requests ({len(merged_prs)})",
+    ""
+])
 
----
-
-## ✅ Merged Pull Requests ({len(merged_prs)})
-"""
 if merged_prs:
-    content += "\n".join(format_pr(pr) for pr in merged_prs)
+    content.extend(format_pr(pr) for pr in merged_prs)
 else:
-    content += "_No merged PRs yet_"
+    content.append("_No merged pull requests found._")
 
-content += "\n"
+# --------------------------------------------------
+# Fallback (IMPORTANT)
+# --------------------------------------------------
+if not open_prs and not merged_prs:
+    content.extend([
+        "",
+        "---",
+        "",
+        "⚠️ **No pull requests were returned by the GitHub API.**",
+        "",
+        "Possible reasons:",
+        "- PRs are in **private repositories**",
+        "- PRs belong to **organization repos**",
+        "- `GITHUB_TOKEN` has limited search scope",
+        "",
+        "💡 **Fix:** Use a Personal Access Token (PAT) instead of `GITHUB_TOKEN`."
+    ])
 
-with open("README.md", "w") as f:
-    f.write(content)
+final_content = "\n".join(content) + "\n"
+
+# --------------------------------------------------
+# Write README
+# --------------------------------------------------
+with open("README.md", "w", encoding="utf-8") as f:
+    f.write(final_content)
+
+print("README.md successfully generated")
