@@ -1,4 +1,4 @@
-name: Generate PR Log and Auto-Merge
+name: Generate PR Log MD and Auto-Merge
 
 on:
   workflow_dispatch:
