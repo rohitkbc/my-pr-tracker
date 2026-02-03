@@ -16,48 +16,64 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Print PRs to terminal
+      - name: Generate PR log file
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USERNAME: rohitkbc
         run: |
           python << 'EOF'
-          import os
-          import requests
+          import os, requests, datetime
 
           TOKEN = os.environ["GITHUB_TOKEN"]
-          USERNAME = os.environ["GITHUB_USERNAME"]
+          USER = os.environ["GITHUB_USERNAME"]
 
           headers = {
               "Authorization": f"token {TOKEN}",
               "Accept": "application/vnd.github+json"
           }
 
-          def fetch(query):
-              url = "https://api.github.com/search/issues"
-              r = requests.get(url, headers=headers, params={"q": query, "per_page": 100})
+          def fetch(q):
+              r = requests.get(
+                  "https://api.github.com/search/issues",
+                  headers=headers,
+                  params={"q": q, "per_page": 100}
+              )
               r.raise_for_status()
               return r.json()["items"]
 
-          open_prs = fetch(f"author:{USERNAME} type:pr is:open")
-          merged_prs = fetch(f"author:{USERNAME} type:pr is:merged")
+          open_prs = fetch(f"author:{USER} type:pr is:open")
+          merged_prs = fetch(f"author:{USER} type:pr is:merged")
 
-          print("\n==============================")
-          print(" OPEN PULL REQUESTS")
-          print("==============================")
+          now = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+
+          lines = []
+          lines.append(f"# PR Activity Log")
+          lines.append(f"_Generated at {now}_\n")
+
+          lines.append("## Open Pull Requests")
           for pr in open_prs:
               repo = "/".join(pr["repository_url"].split("/")[-2:])
-              print(f"- {repo} | {pr['title']} | {pr['html_url']}")
+              lines.append(f"- **{repo}** – {pr['title']}")
+              lines.append(f"  {pr['html_url']}")
 
-          print("\n==============================")
-          print(" MERGED PULL REQUESTS")
-          print("==============================")
+          lines.append("\n## Merged Pull Requests")
           for pr in merged_prs:
               repo = "/".join(pr["repository_url"].split("/")[-2:])
-              print(f"- {repo} | {pr['title']} | {pr['html_url']}")
+              lines.append(f"- **{repo}** – {pr['title']}")
+              lines.append(f"  {pr['html_url']}")
 
-          print("\n==============================")
-          print(f"TOTAL OPEN   : {len(open_prs)}")
-          print(f"TOTAL MERGED : {len(merged_prs)}")
-          print("==============================\n")
+          lines.append("\n---")
+          lines.append(f"**Total Open:** {len(open_prs)}")
+          lines.append(f"**Total Merged:** {len(merged_prs)}")
+
+          with open("pr-log.md", "w") as f:
+              f.write("\n".join(lines))
+
+          print("PR log written to pr-log.md")
           EOF
+
+      - name: Upload PR log artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-log
+          path: pr-log.md
