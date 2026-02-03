@@ -1,0 +1,63 @@
+name: Print My PRs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print-prs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Print PRs to terminal
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: rohitkbc
+        run: |
+          python << 'EOF'
+          import os
+          import requests
+
+          TOKEN = os.environ["GITHUB_TOKEN"]
+          USERNAME = os.environ["GITHUB_USERNAME"]
+
+          headers = {
+              "Authorization": f"token {TOKEN}",
+              "Accept": "application/vnd.github+json"
+          }
+
+          def fetch(query):
+              url = "https://api.github.com/search/issues"
+              r = requests.get(url, headers=headers, params={"q": query, "per_page": 100})
+              r.raise_for_status()
+              return r.json()["items"]
+
+          open_prs = fetch(f"author:{USERNAME} type:pr is:open")
+          merged_prs = fetch(f"author:{USERNAME} type:pr is:merged")
+
+          print("\n==============================")
+          print(" OPEN PULL REQUESTS")
+          print("==============================")
+          for pr in open_prs:
+              repo = "/".join(pr["repository_url"].split("/")[-2:])
+              print(f"- {repo} | {pr['title']} | {pr['html_url']}")
+
+          print("\n==============================")
+          print(" MERGED PULL REQUESTS")
+          print("==============================")
+          for pr in merged_prs:
+              repo = "/".join(pr["repository_url"].split("/")[-2:])
+              print(f"- {repo} | {pr['title']} | {pr['html_url']}")
+
+          print("\n==============================")
+          print(f"TOTAL OPEN   : {len(open_prs)}")
+          print(f"TOTAL MERGED : {len(merged_prs)}")
+          print("==============================\n")
+          EOF
