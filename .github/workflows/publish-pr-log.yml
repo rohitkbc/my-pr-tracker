@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: read   # 🔑 REQUIRED to read artifacts from another workflow
 
 jobs:
   publish-log:
@@ -26,11 +27,12 @@ jobs:
         with:
           name: pr-log
           run-id: ${{ github.event.workflow_run.id }}
+          path: ./artifact
 
-      - name: Move log to repo
+      - name: Move log into repo
         run: |
           mkdir -p logs
-          mv pr-log.md logs/pr-log.md
+          mv artifact/pr-log.md logs/pr-log.md
           ls -l logs/
 
       - name: Create Pull Request
