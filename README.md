@@ -1,10 +1,12 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-02-12 16:46 UTC**_
+_Last updated: **2026-02-12 17:27 UTC**_
 
 ---
 
 ## 🔓 Open Pull Requests
+- **kubernetes/kubernetes** – Add unit test for TestParseQOSReserved in container_manager_test.go
+  https://github.com/kubernetes/kubernetes/pull/136992
 - **kubernetes-sigs/node-readiness-controller** – Update manager.yaml to modify nodeSelector and tolerations
   https://github.com/kubernetes-sigs/node-readiness-controller/pull/129
 - **TheAlgorithms/Ruby** – Add Gitpod setup
@@ -45,5 +47,5 @@ _Last updated: **2026-02-12 16:46 UTC**_
   https://github.com/FerretDB/FerretDB/pull/3472
 
 ---
-**Total Open:** 2
+**Total Open:** 3
 **Total Merged:** 16
