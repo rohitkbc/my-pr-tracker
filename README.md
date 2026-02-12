@@ -1,10 +1,12 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-02-12 04:34 UTC**_
+_Last updated: **2026-02-12 16:46 UTC**_
 
 ---
 
 ## 🔓 Open Pull Requests
+- **kubernetes-sigs/node-readiness-controller** – Update manager.yaml to modify nodeSelector and tolerations
+  https://github.com/kubernetes-sigs/node-readiness-controller/pull/129
 - **TheAlgorithms/Ruby** – Add Gitpod setup
   https://github.com/TheAlgorithms/Ruby/pull/219
 
@@ -43,5 +45,5 @@ _Last updated: **2026-02-12 04:34 UTC**_
   https://github.com/FerretDB/FerretDB/pull/3472
 
 ---
-**Total Open:** 1
+**Total Open:** 2
 **Total Merged:** 16
