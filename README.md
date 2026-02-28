@@ -1,6 +1,6 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-02-27 04:22 UTC**_
+_Last updated: **2026-02-28 04:04 UTC**_
 
 ---
 
@@ -37,12 +37,6 @@ _Last updated: **2026-02-27 04:22 UTC**_
   https://github.com/TheAlgorithms/JavaScript/pull/1466
 - **internetarchive/openlibrary** – Fix typos found by codespell
   https://github.com/internetarchive/openlibrary/pull/8364
-- **Codecademy/docs** – Add rpartition() term entry in python
-  https://github.com/Codecademy/docs/pull/3427
-- **Codecademy/docs** – Add rsplit() term entry in python
-  https://github.com/Codecademy/docs/pull/3425
-- **Codecademy/docs** – Add splitlines term entry for python
-  https://github.com/Codecademy/docs/pull/3424
 - **novuhq/novu** – feat(web): Add blank workflow creation button
   https://github.com/novuhq/novu/pull/4323
 - **FerretDB/FerretDB** – Add operation mode definition to Glossary
@@ -50,4 +44,4 @@ _Last updated: **2026-02-27 04:22 UTC**_
 
 ---
 **Total Open:** 4
-**Total Merged:** 16
+**Total Merged:** 13
