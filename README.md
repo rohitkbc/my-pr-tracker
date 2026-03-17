@@ -1,6 +1,6 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-03-16 05:01 UTC**_
+_Last updated: **2026-03-17 04:28 UTC**_
 
 ---
 
@@ -9,12 +9,12 @@ _Last updated: **2026-03-16 05:01 UTC**_
   https://github.com/kubernetes/website/pull/54416
 - **kubernetes/kubernetes** – Add unit test for TestParseQOSReserved in container_manager_test.go
   https://github.com/kubernetes/kubernetes/pull/136992
-- **kubernetes-sigs/node-readiness-controller** – Update manager.yaml to modify nodeSelector and tolerations
-  https://github.com/kubernetes-sigs/node-readiness-controller/pull/129
 - **TheAlgorithms/Ruby** – Add Gitpod setup
   https://github.com/TheAlgorithms/Ruby/pull/219
 
 ## ✅ Merged Pull Requests
+- **kubernetes-sigs/node-readiness-controller** – Update manager.yaml to modify nodeSelector and tolerations
+  https://github.com/kubernetes-sigs/node-readiness-controller/pull/129
 - **kubernetes/website** – Update Kubernetes Dashboard documentation with deprecation notice
   https://github.com/kubernetes/website/pull/54261
 - **cert-manager/website** – Update copyright year in Footer component
@@ -43,5 +43,5 @@ _Last updated: **2026-03-16 05:01 UTC**_
   https://github.com/FerretDB/FerretDB/pull/3472
 
 ---
-**Total Open:** 4
-**Total Merged:** 13
+**Total Open:** 3
+**Total Merged:** 14
