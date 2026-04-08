@@ -1,12 +1,10 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-04-07 04:43 UTC**_
+_Last updated: **2026-04-08 04:58 UTC**_
 
 ---
 
 ## 🔓 Open Pull Requests
-- **kubernetes/website** – Update redirects for kubectl documentation
-  https://github.com/kubernetes/website/pull/54416
 - **kubernetes/kubernetes** – Add unit test for TestParseQOSReserved in container_manager_test.go
   https://github.com/kubernetes/kubernetes/pull/136992
 - **TheAlgorithms/Ruby** – Add Gitpod setup
@@ -43,5 +41,5 @@ _Last updated: **2026-04-07 04:43 UTC**_
   https://github.com/FerretDB/FerretDB/pull/3472
 
 ---
-**Total Open:** 3
+**Total Open:** 2
 **Total Merged:** 14
