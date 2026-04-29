@@ -1,6 +1,6 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-04-28 05:41 UTC**_
+_Last updated: **2026-04-29 05:37 UTC**_
 
 ---
 
@@ -17,7 +17,13 @@ _Last updated: **2026-04-28 05:41 UTC**_
   https://github.com/kubernetes/website/pull/54261
 - **cert-manager/website** – Update copyright year in Footer component
   https://github.com/cert-manager/website/pull/1932
+- **TheAlgorithms/R** – Add Gitpod setup
+  https://github.com/TheAlgorithms/R/pull/119
+- **TheAlgorithms/JavaScript** – Add gitpod badge
+  https://github.com/TheAlgorithms/JavaScript/pull/1466
+- **internetarchive/openlibrary** – Fix typos found by codespell
+  https://github.com/internetarchive/openlibrary/pull/8364
 
 ---
 **Total Open:** 2
-**Total Merged:** 3
+**Total Merged:** 6
