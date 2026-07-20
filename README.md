@@ -1,12 +1,10 @@
 # 📌 My Pull Request Activity
 
-_Last updated: **2026-07-19 05:33 UTC**_
+_Last updated: **2026-07-20 05:51 UTC**_
 
 ---
 
 ## 🔓 Open Pull Requests
-- **kubernetes/kubernetes** – Add unit test for TestParseQOSReserved in container_manager_test.go
-  https://github.com/kubernetes/kubernetes/pull/136992
 - **TheAlgorithms/Ruby** – Add Gitpod setup
   https://github.com/TheAlgorithms/Ruby/pull/219
 
@@ -41,5 +39,5 @@ _Last updated: **2026-07-19 05:33 UTC**_
   https://github.com/FerretDB/FerretDB/pull/3472
 
 ---
-**Total Open:** 2
+**Total Open:** 1
 **Total Merged:** 14
